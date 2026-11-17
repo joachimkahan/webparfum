@@ -1,0 +1,464 @@
+/* 02-collection.css : la vitrine des parfums, la fiche ouverte et le tiroir du panier.
+   Mobile d'abord (390 px). Aucune couleur en dur : tout vient des variables de base.css. */
+
+/* ---------- En-tête de section ---------- */
+.collection__tete { max-width: 40rem; margin-bottom: var(--space-7); }
+.collection__tete h2 { margin-bottom: var(--space-4); }
+.collection__exemple {
+    margin-top: var(--space-4);
+    padding-left: var(--space-3);
+    border-left: 1px solid var(--color-line-strong);
+}
+.collection__vide { margin-top: var(--space-5); }
+
+/* ---------- Grille : 2 colonnes serrées au téléphone, 3 à partir de 72 rem ---------- */
+.collection__grille {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-4);
+}
+.collection__item {
+    min-width: 0;
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-4);
+}
+@media (max-width: 23.49rem) {
+    .collection__grille { grid-template-columns: minmax(0, 1fr); }
+}
+@media (min-width: 48rem) {
+    .collection__grille { gap: var(--space-7) var(--space-6); }
+}
+@media (min-width: 72rem) {
+    .collection__grille { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-8) var(--space-7); }
+}
+
+/* ---------- Une fiche : ni carte, ni fond blanc, ni ombre ---------- */
+.fiche { display: flex; flex-direction: column; height: 100%; }
+
+.fiche__visuel {
+    position: relative; aspect-ratio: 4 / 5;
+    background: var(--color-bg-alt);
+    color: var(--color-ink-soft);
+    overflow: hidden;
+    margin-bottom: var(--space-4);
+}
+.fiche__visuel { display: block; color: var(--color-ink-soft); text-decoration: none; cursor: pointer; }
+.fiche__visuel img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Indice d'ouverture : trois mots en italique au bas du visuel. Sur écran tactile il reste lisible ; à la souris il apparaît au survol. */
+.fiche__voir {
+    position: absolute; left: 0; right: 0; bottom: var(--space-3);
+    text-align: center;
+    font-family: var(--font-display); font-style: italic; font-size: var(--fs-sm); line-height: 1.2;
+    color: var(--color-ink-soft);
+}
+
+/* Silhouettes d'attente : trait gravé, flacon posé sur sa ligne de sol, jus en traits fins */
+.fiche__dessin { position: absolute; inset: 0; padding: 6% 10% 10%; }
+.ligne__dessin { position: absolute; inset: 0; padding: 6% 8% 8%; }
+.fiche__dessin svg, .ligne__dessin svg { width: 100%; height: 100%; max-width: none; overflow: visible; }
+.fiche__dessin svg *, .ligne__dessin svg * { vector-effect: non-scaling-stroke; }
+.fiche__dessin .sol, .ligne__dessin .sol { stroke: var(--color-line-strong); }
+.fiche__dessin .int, .ligne__dessin .int { opacity: 0.5; }
+.fiche__dessin .jus { stroke: var(--color-line-strong); stroke-width: 0.8; transition: stroke var(--dur-fast) var(--ease-out); }
+
+/* « Exemple » : une mention, pas une étiquette encadrée */
+.fiche__visuel .tag {
+    position: absolute; top: var(--space-3); left: var(--space-3);
+    padding: 0; border: 0; border-radius: 0; background: none;
+    font-family: var(--font-display); font-style: italic; font-weight: 400;
+    font-size: var(--fs-sm); letter-spacing: 0; text-transform: none;
+    color: var(--color-ink-soft);
+}
+
+.fiche__maison { font-size: var(--fs-xs); line-height: 1.4; color: var(--color-ink-soft); margin: 0 0 var(--space-1); }
+.fiche__nom {
+    font-size: var(--fs-h4);
+    overflow-wrap: anywhere; hyphens: auto;
+    margin-bottom: var(--space-2);
+}
+/* Le lien du nom garde la place du titre ; sa zone de toucher dépasse un peu au-dessus et au-dessous (44 px) */
+.fiche__lien {
+    display: inline-block; color: inherit; text-decoration: underline;
+    text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: 0.2em;
+    padding-block: 0.7rem; margin-block: -0.7rem;
+    transition: text-decoration-color var(--dur-fast) var(--ease-out);
+}
+.fiche__famille { font-size: var(--fs-sm); line-height: 1.4; }
+.fiche__notes { font-size: var(--fs-xs); line-height: 1.5; color: var(--color-ink-soft); margin-top: var(--space-1); }
+
+.fiche__achat { margin-top: auto; padding-top: var(--space-4); }
+
+/* Choix du format : trois mots, le choisi en encre avec un trait fin dessous ; un seul filet sous le groupe */
+.fiche__formats {
+    border: 0; border-bottom: 1px solid var(--color-line);
+    margin: 0; padding: 0; min-width: 0; display: flex;
+}
+.fmt { position: relative; flex: 1 1 0; }
+.fmt input {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    margin: 0; opacity: 0; cursor: pointer; z-index: 2;
+}
+.fmt label {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 2.75rem; border: 0;
+    font-size: var(--fs-sm); font-variant-numeric: tabular-nums; white-space: nowrap;
+    color: var(--color-ink-soft);
+    transition: color var(--dur-fast) var(--ease-out);
+}
+.fmt label::after {
+    content: ""; position: absolute; left: 22%; right: 22%; bottom: -1px; height: 2px;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transition: transform var(--dur-fast) var(--ease-out);
+}
+.fmt input:checked + label { background: none; color: var(--color-ink); font-weight: 500; }
+.fmt input:checked + label::after { transform: scaleX(1); }
+/* Un seul contour au clavier : sur le libellé, pas sur la case invisible */
+.fmt input:focus-visible { outline: none; }
+.fmt input:focus-visible + label { outline: 2px solid var(--color-primary); outline-offset: -3px; }
+
+.fiche__prix {
+    margin: var(--space-4) 0 var(--space-3);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+    line-height: 1.1; letter-spacing: -0.02em;
+    font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Ajouter : contour fin ; « Ajouté » est un plein lie-de-vin bref */
+.fiche__ajout { padding-inline: var(--space-2); font-size: var(--fs-sm); border-color: var(--color-line-strong); }
+.fiche__ajout.is-added { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-on-primary); }
+.fiche__video { width: 100%; justify-content: flex-start; margin-top: var(--space-1); font-size: var(--fs-xs); }
+.fiche__video svg { width: 1rem; height: 1rem; flex: none; }
+
+@media (min-width: 48rem) {
+    .fiche__nom { font-size: var(--fs-h3); }
+    .fiche__ajout { padding-inline: 1.6rem; }
+    .fiche__video { font-size: var(--fs-sm); }
+}
+
+/* ---------- Fiche ouverte ---------- */
+/* Téléphone : une feuille qui monte du bas (transform seulement). Ordinateur : une grande feuille centrée,
+   vidéo à gauche, informations à droite. Mêmes pièces dans les deux cas, seule la grille change. */
+html.wp-fiche-ouverte { overflow: hidden; scrollbar-gutter: stable; }
+
+.fo {
+    position: fixed; inset: 0; z-index: 95;
+    visibility: hidden; pointer-events: none;
+    transition: visibility 0s linear 260ms;
+}
+.fo.is-open { visibility: visible; pointer-events: auto; transition-delay: 0s; }
+
+.fo__voile {
+    position: absolute; inset: 0;
+    background: color-mix(in oklch, var(--color-ink) 42%, transparent);
+    opacity: 0;
+    transition: opacity 260ms var(--ease-in-out);
+}
+.fo.is-open .fo__voile { opacity: 1; transition: opacity 380ms var(--ease-out); }
+
+.fo__feuille {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    height: 92vh; height: 92svh;
+    display: flex; flex-direction: column;
+    background: var(--color-bg); color: var(--color-ink);
+    border-top: 1px solid var(--color-line-strong);
+    outline: none;
+    transform: translateY(100%);
+    transition: transform 260ms var(--ease-in-out);
+}
+.fo.is-open .fo__feuille { transform: none; transition: transform 380ms var(--ease-out); }
+
+/* Poignée : un trait fin, seulement un repère de la feuille qui monte */
+.fo__poignee { flex: none; width: 2.5rem; height: 2px; margin: var(--space-2) auto 0; background: var(--color-line-strong); }
+
+/* Barre du haut : précédent, « 2 sur 6 », suivant, et fermer */
+.fo__tete {
+    flex: none; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--gutter);
+    min-height: 3.25rem;
+}
+.fo__nav { display: flex; align-items: center; margin-left: -0.75rem; }
+.fo__fleche, .fo__fermer { width: 2.75rem; height: 2.75rem; display: grid; place-items: center; color: var(--color-ink); transition: color var(--dur-fast) var(--ease-out); }
+.fo__fermer { margin-right: -0.75rem; }
+.fo__compte {
+    min-width: 4.5rem; text-align: center;
+    font-family: var(--font-display); font-style: italic; font-size: var(--fs-base);
+    font-variant-numeric: lining-nums tabular-nums; color: var(--color-ink-soft);
+}
+
+/* Zone qui défile : la vidéo (ou le grand visuel), puis les informations */
+.fo__defile { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+
+.fo__media { position: relative; height: 52vh; height: 52svh; background: var(--color-bg-alt); color: var(--color-ink-soft); overflow: hidden; }
+.fo__film { display: none; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: transparent; }
+.fo__image { position: absolute; inset: 0; display: grid; place-items: center; }
+.fo__image img { width: 100%; height: 100%; object-fit: contain; }
+.fo__dessin { width: 80%; height: 82%; }
+.fo__dessin svg { width: 100%; height: 100%; max-width: none; overflow: visible; }
+.fo__dessin svg * { vector-effect: non-scaling-stroke; }
+.fo__dessin svg { stroke-width: 1.25; }
+.fo__dessin .sol { stroke: var(--color-line-strong); }
+.fo__dessin .int { opacity: 0.5; }
+.fo__dessin .jus { stroke: var(--color-line-strong); stroke-width: 0.8; }
+.fo__feuille.a-film .fo__film { display: block; }
+.fo__feuille.a-film .fo__image { display: none; }
+
+.fo__infos { padding: var(--space-5) var(--gutter) var(--space-6); }
+.fo__vignette { display: none; }
+.fo__sur { display: flex; align-items: baseline; gap: var(--space-4); }
+.fo__maison { font-size: var(--fs-sm); line-height: 1.4; color: var(--color-ink-soft); }
+.fo__exemple { font-family: var(--font-display); font-style: italic; font-size: var(--fs-sm); line-height: 1.4; color: var(--color-ink-soft); }
+.fo__nom { font-size: var(--fs-h2); margin: var(--space-2) 0 var(--space-3); overflow-wrap: anywhere; hyphens: auto; }
+.fo__famille { font-family: var(--font-display); font-style: italic; font-size: var(--fs-lg); line-height: 1.3; color: var(--color-ink-soft); }
+.fo__description { margin-top: var(--space-5); font-size: var(--fs-base); line-height: 1.65; }
+
+/* Notes : une pyramide en trois lignes à filets, ou une seule ligne de notes */
+.fo__notes { margin: var(--space-6) 0 0; border-top: 1px solid var(--color-line); }
+.fo__rang {
+    display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: var(--space-4);
+    align-items: baseline;
+    padding: var(--space-3) 0; border-bottom: 1px solid var(--color-line);
+}
+.fo__rang dt { font-family: var(--font-display); font-style: italic; font-size: var(--fs-base); color: var(--color-ink-soft); }
+.fo__rang dd { margin: 0; font-size: var(--fs-sm); line-height: 1.5; }
+
+/* Barre d'achat : toujours à l'écran, au bas de la feuille */
+.fo__barre {
+    flex: none;
+    display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center;
+    gap: var(--space-3) var(--space-5);
+    padding: var(--space-3) var(--gutter) calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--color-line);
+    background: var(--color-bg);
+}
+.fo__formats { grid-column: 1 / -1; }
+.fo__prix {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+    line-height: 1.1; letter-spacing: -0.02em;
+    font-variant-numeric: lining-nums tabular-nums;
+}
+.fo__ajout { padding-inline: var(--space-4); }
+.fo__ajout.is-added { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-on-primary); }
+
+/* Fondu bref d'un parfum à l'autre */
+.fo__media, .fo__infos, .fo__barre { transition: opacity 220ms var(--ease-out); }
+.fo__feuille.is-swap .fo__media, .fo__feuille.is-swap .fo__infos, .fo__feuille.is-swap .fo__barre { opacity: 0; transition-duration: 100ms; }
+
+/* ---------- Ordinateur : grande feuille centrée, deux colonnes séparées par un filet ---------- */
+@media (min-width: 64rem) {
+    .fo__feuille {
+        --fo-h: 90vh; --fo-h: 90svh;
+        inset: 0; margin: auto;
+        width: min(72rem, calc(100% - 2 * var(--gutter)));
+        height: min(var(--fo-h), 52rem);
+        display: grid;
+        grid-template-columns: calc(min(var(--fo-h), 52rem) * 9 / 16 - 1px) minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        border: 1px solid var(--color-line-strong);
+        transform: scale(0.985); opacity: 0;
+        transition: transform 260ms var(--ease-in-out), opacity 260ms var(--ease-in-out);
+    }
+    .fo.is-open .fo__feuille { transform: none; opacity: 1; transition: transform 380ms var(--ease-out), opacity 380ms var(--ease-out); }
+    .fo__poignee { display: none; }
+    .fo__defile { display: contents; }
+    .fo__media { grid-column: 1; grid-row: 1 / span 3; height: auto; border-right: 1px solid var(--color-line); }
+    .fo__feuille.a-film .fo__media, .fo__film { background: var(--color-dark); }
+    .fo__dessin { width: 112%; height: 84%; }
+    .fo__tete { grid-column: 2; grid-row: 1; padding: var(--space-3) var(--space-7) 0; }
+    .fo__infos { grid-column: 2; grid-row: 2; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-5) var(--space-7) var(--space-6); }
+    .fo__barre { grid-column: 2; grid-row: 3; padding: var(--space-5) var(--space-7) var(--space-6); gap: var(--space-4) var(--space-6); }
+    .fo__formats { max-width: 24rem; }
+    .fo__ajout { max-width: 22rem; justify-self: start; width: 100%; }
+    .fo__vignette { display: block; position: relative; width: 4rem; aspect-ratio: 4 / 5; margin-bottom: var(--space-5); background: var(--color-bg-alt); color: var(--color-ink-soft); overflow: hidden; }
+    .fo__vignette[hidden] { display: none; }
+    .fo__vignette img { width: 100%; height: 100%; object-fit: cover; }
+    .fo__description { max-width: 46ch; }
+    .fo__rang { grid-template-columns: 6rem minmax(0, 1fr); }
+    .fo__notes { max-width: 34rem; }
+}
+
+/* ---------- Mouvement réduit : la feuille apparaît sans se déplacer (fondu seul) ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .fo__feuille, .fo.is-open .fo__feuille { transform: none; }
+    .fo__feuille { opacity: 0; transition: opacity 140ms linear; }
+    .fo.is-open .fo__feuille { opacity: 1; transition: opacity 140ms linear; }
+    .fo__voile, .fo.is-open .fo__voile { transition: opacity 140ms linear; }
+    .fo__fleche, .fo__fermer, .fo__media, .fo__infos, .fo__barre { transition: none !important; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .fo__fleche:hover, .fo__fermer:hover { color: var(--color-primary); }
+}
+
+/* ---------- Pastille du compteur de l'en-tête ---------- */
+[data-cart-count].is-bump { display: inline-block; animation: wp-bump 300ms var(--ease-out); }
+@keyframes wp-bump { 0% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+/* ---------- Tiroir du panier : monte du bas au téléphone, vient de la droite sur ordinateur ---------- */
+html.wp-panier-ouvert { overflow: hidden; }
+
+.panier {
+    position: fixed; inset: 0; z-index: 90;
+    visibility: hidden; pointer-events: none;
+    transition: visibility 0s linear 260ms;
+}
+.panier.is-open { visibility: visible; pointer-events: auto; transition-delay: 0s; }
+
+.panier__voile {
+    position: absolute; inset: 0;
+    background: color-mix(in oklch, var(--color-ink) 30%, transparent);
+    opacity: 0;
+    transition: opacity 260ms var(--ease-in-out);
+}
+.panier.is-open .panier__voile { opacity: 1; transition: opacity 380ms var(--ease-out); }
+
+.panier__tiroir {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    max-height: 92vh; max-height: 92dvh;
+    display: flex; flex-direction: column;
+    background: var(--color-bg); color: var(--color-ink);
+    box-shadow: var(--shadow-drawer);
+    padding-bottom: env(safe-area-inset-bottom);
+    transform: translateY(100%);
+    transition: transform 260ms var(--ease-in-out);
+}
+.panier.is-open .panier__tiroir { transform: none; transition: transform 380ms var(--ease-out); }
+
+@media (min-width: 48rem) {
+    .panier__tiroir {
+        left: auto; top: 0; width: min(30rem, 100%); max-height: none;
+        transform: translateX(100%);
+    }
+}
+
+.panier__tete {
+    flex: none; display: flex; align-items: center; justify-content: space-between;
+    padding: var(--space-3) var(--gutter) var(--space-3);
+    border-bottom: 1px solid var(--color-line);
+}
+.panier__tete h2 { font-size: var(--fs-h3); }
+.panier__fermer { width: 2.75rem; height: 2.75rem; display: grid; place-items: center; margin-right: -0.75rem; }
+
+.panier__corps {
+    flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+    padding: 0 var(--gutter) var(--space-6);
+}
+
+/* Panier vide : un flacon fin au-dessus de la phrase, le lien dessous */
+.panier__vide { display: grid; gap: var(--space-3); justify-items: center; text-align: center; padding-block: var(--space-7); }
+.panier__vide p { max-width: 28ch; }
+.panier__vide-dessin { width: 3.5rem; height: auto; color: var(--color-ink-soft); margin-bottom: var(--space-2); }
+.panier__vide-dessin * { vector-effect: non-scaling-stroke; }
+.panier__vide-dessin .sol { stroke: var(--color-line-strong); }
+
+/* Lignes */
+.panier__lignes { list-style: none; margin: 0; padding: 0; }
+/* Ligne : vignette du flacon à gauche, détail à droite */
+.ligne {
+    display: grid; grid-template-columns: 3.5rem minmax(0, 1fr);
+    column-gap: var(--space-4); row-gap: var(--space-2);
+    padding: var(--space-4) 0; border-bottom: 1px solid var(--color-line);
+}
+.ligne > :not(.ligne__vignette) { grid-column: 2; }
+.ligne__vignette {
+    grid-column: 1; grid-row: 1 / span 3; align-self: start;
+    position: relative; aspect-ratio: 4 / 5; overflow: hidden;
+    background: var(--color-bg-alt); color: var(--color-ink-soft);
+}
+.ligne__vignette img { width: 100%; height: 100%; object-fit: cover; }
+.ligne__tete { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-4); }
+.ligne__nom { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.15; letter-spacing: -0.02em; margin: 0; overflow-wrap: anywhere; }
+.ligne__prix { font-family: var(--font-display); font-size: 1.25rem; white-space: nowrap; font-variant-numeric: lining-nums tabular-nums; }
+.ligne__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-3); font-size: var(--fs-sm); color: var(--color-ink-soft); }
+.ligne__meta .ligne__maison { flex: 0 0 100%; }
+.ligne__meta .ligne__maison + span::before { content: none; }
+.ligne__meta > span + span::before {
+    content: ""; display: inline-block; width: 1px; height: 0.9em;
+    margin-right: var(--space-3); vertical-align: -0.1em;
+    background: var(--color-line-strong);
+}
+.ligne__ctl { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.qte { display: inline-flex; align-items: center; border: 1px solid var(--color-line-strong); border-radius: var(--radius); }
+.qte__btn {
+    width: 2.75rem; height: 2.75rem; display: grid; place-items: center;
+    font-size: 1.25rem; line-height: 1;
+    transition: background-color var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+}
+.qte__btn[aria-disabled="true"] { opacity: 0.35; cursor: default; }
+.qte__val { min-width: 2.25rem; text-align: center; font-variant-numeric: tabular-nums; }
+.ligne__retirer { font-size: var(--fs-sm); }
+
+/* Livraison offerte : un filet qui se remplit */
+.panier__livraison { padding: var(--space-4) 0 var(--space-2); }
+.jauge { height: 2px; margin-top: var(--space-2); background: var(--color-line); overflow: hidden; }
+.jauge__rempli {
+    display: block; height: 100%;
+    background: var(--color-primary);
+    transform-origin: left center; transform: scaleX(var(--p, 0));
+    transition: transform var(--dur) var(--ease-out);
+}
+
+/* Totaux */
+.panier__totaux { margin: var(--space-4) 0 var(--space-6); display: grid; gap: var(--space-2); }
+.panier__total-ligne { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-4); font-size: var(--fs-sm); }
+.panier__total-ligne dt { color: var(--color-ink-soft); }
+.panier__total-ligne dd { margin: 0; font-variant-numeric: tabular-nums; }
+.panier__total-ligne--final {
+    margin-top: var(--space-2); padding-top: var(--space-3);
+    border-top: 1px solid var(--color-ink);
+    font-family: var(--font-display); font-size: 1.6rem; letter-spacing: -0.02em;
+}
+.panier__total-ligne--final dt { color: var(--color-ink); }
+
+/* Coordonnées */
+.panier__coord { border: 0; margin: 0 0 var(--space-5); padding: 0; min-width: 0; }
+.panier__coord legend {
+    padding: 0; margin-bottom: var(--space-4);
+    font-family: var(--font-display); font-size: var(--fs-lg); letter-spacing: -0.02em;
+}
+.champ { margin-bottom: var(--space-4); }
+.champ__lib { display: block; font-size: var(--fs-sm); font-weight: 500; margin-bottom: var(--space-1); }
+.champ__aide { font-weight: 400; color: var(--color-ink-soft); }
+.champ__ctl {
+    display: block; width: 100%; min-height: 3rem;
+    padding: 0.65rem 0.8rem;
+    font-size: 1rem; line-height: 1.4;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line-strong); border-radius: var(--radius);
+    transition: border-color var(--dur-fast) var(--ease-out);
+}
+textarea.champ__ctl { resize: vertical; min-height: 5rem; }
+.champ__ctl:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 1px; border-color: var(--color-primary); }
+.champ__ctl[aria-invalid="true"] { border-color: var(--color-primary); }
+.champ__err { margin-top: var(--space-1); font-size: var(--fs-sm); color: var(--color-primary); }
+
+.panier__actions { display: grid; gap: var(--space-3); }
+.panier__envoye { margin-top: var(--space-4); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-1) var(--space-4); }
+.panier__envoye p { color: var(--color-ink); }
+.panier__vider { font-size: var(--fs-sm); color: var(--color-ink-soft); }
+.panier__note { margin-top: var(--space-4); }
+
+/* ---------- Mouvement réduit : le tiroir apparaît sans glisser ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .panier, .panier__voile, .panier__tiroir, .jauge__rempli, .fmt label, .fmt label::after, .fiche__dessin .jus, .qte__btn, .fiche__voir { transition: none !important; }
+    [data-cart-count].is-bump { animation: none; }
+}
+
+/* ---------- Survols (souris seulement) ---------- */
+@media (hover: hover) and (pointer: fine) {
+    .fiche__voir { opacity: 0; transform: translateY(4px); transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+    .fiche__visuel:hover .fiche__voir { opacity: 1; transform: none; color: var(--color-ink); }
+    .fiche__lien:hover { text-decoration-color: var(--color-line-strong); }
+    .fmt input:not(:checked):hover + label { color: var(--color-ink); }
+    .fiche__ajout:hover { background: transparent; border-color: var(--color-ink); color: var(--color-ink); }
+    .fiche__ajout.is-added:hover { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-on-primary); }
+    .fiche:hover .jus { stroke: var(--color-primary); }
+    .qte__btn:not([aria-disabled="true"]):hover { background: var(--color-bg-alt); }
+    .panier__fermer:hover { color: var(--color-primary); }
+    .panier__vider:hover { color: var(--color-primary); }
+}

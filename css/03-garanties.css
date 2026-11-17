@@ -1,0 +1,106 @@
+/* 03-garanties.css : la section sombre (conservation, preuves).
+   Mobile d'abord (390 px), puis 48 rem et 72 rem. Aucune couleur écrite en dur : tout vient de base.css. */
+
+.gar :focus-visible { outline-color: var(--color-on-dark); }
+
+.gar__head { margin-bottom: var(--space-6); }
+.gar__head .eyebrow { margin-bottom: var(--space-3); }
+.gar__head h2 { max-width: 16ch; }
+
+/* Les blocs qui suivent la cave se séparent par un filet fin */
+.gar__preuves, .gar__fin {
+    margin-top: var(--space-7);
+    padding-top: var(--space-6);
+    border-top: 1px solid color-mix(in oklch, var(--color-on-dark) 22%, transparent);
+}
+
+/* ---------- La conservation : planche en coupe ---------- */
+.gar__cave { display: grid; gap: var(--space-5); }
+.gar__cave-text h3 { margin-bottom: var(--space-3); }
+.gar__cave-text .lead { max-width: 30ch; }
+
+.gar-fig { margin: 0; color: var(--color-on-dark); }
+.gar-fig__svg {
+    width: 100%; height: auto; aspect-ratio: 600 / 408;
+    fill: none; stroke: currentColor; stroke-width: 1.2;
+    stroke-linecap: round; stroke-linejoin: round;
+}
+.gar-fig .soft { stroke: var(--color-on-dark-soft); stroke-width: 0.9; }
+.gar-fig .fine { stroke-width: 0.6; }
+.gar-fig .o { fill: var(--color-dark); }
+.gar-fig .ns { stroke: none; }
+.gar-fig .wood { fill: url(#gar-hatch); }
+.gar-fig .shade { fill: url(#gar-hatch); stroke: none; }
+.gar-fig .hatch { stroke: var(--color-on-dark-soft); stroke-width: 0.6; }
+.gar-fig .jus-h { stroke: var(--color-on-dark-soft); stroke-width: 0.7; }
+.gar-fig .jusr { fill: url(#gar-jus); stroke: none; }
+.gar-fig .jusl { stroke: var(--color-on-dark-soft); stroke-width: 0.7; }
+.gar-fig .sil { stroke-width: 1.35; }
+.gar-fig .sil .soft { stroke-width: 0.9; }
+.gar-fig .vial { stroke-width: 1; }
+.gar-fig .dots { stroke: var(--color-on-dark-soft); stroke-width: 1.6; }
+.gar-fig .ray { stroke: var(--color-on-dark-soft); stroke-width: 0.8; }
+.gar-fig .zone { stroke: var(--color-on-dark-soft); stroke-width: 3; stroke-linecap: butt; }
+.gar-fig .needle {
+    stroke: var(--color-primary-on-dark); stroke-width: 1.6;
+    transform-box: view-box; transform-origin: 436px 166px;
+}
+.gar-fig .dot { fill: currentColor; stroke: none; }
+.gar-fig__frame { stroke: var(--color-on-dark-soft); stroke-width: 0.8; opacity: 0.6; }
+.gar-fig :where(text) { stroke: none; fill: currentColor; font-family: var(--font-display); }
+.gar-fig__title { font-size: 20px; font-style: italic; fill: var(--color-on-dark-soft); }
+.gar-fig__num { font-size: 22px; font-style: italic; }
+
+.gar-fig__legend {
+    list-style: none; margin: var(--space-4) 0 0; padding: 0;
+    display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6);
+}
+.gar-fig__legend li { display: flex; align-items: baseline; gap: var(--space-3); font-size: var(--fs-base); }
+.gar-fig__n { font-family: var(--font-display); font-style: italic; font-size: 1.25rem; line-height: 1; }
+
+/* Un seul mouvement : l'aiguille de l'hygromètre se pose quand la planche entre à l'écran. */
+.js .gar-fig[data-reveal] { transform: none; }
+.js .gar-fig .needle { transition: transform 1.4s var(--ease-out) 0.3s; }
+.js .gar-fig:not(.is-visible) .needle { transform: rotate(-40deg); }
+
+/* ---------- Ce que vous recevez ---------- */
+.gar__preuves { display: grid; gap: var(--space-5); }
+
+.gar__list {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-5); row-gap: var(--space-6);
+}
+.gar__proof {
+    padding-top: var(--space-4);
+    border-top: 1px solid color-mix(in oklch, var(--color-on-dark) 22%, transparent);
+}
+.gar__proof-t {
+    margin: 0;
+    font-family: var(--font-display); font-weight: 400;
+    font-size: var(--fs-h4); line-height: 1.2; letter-spacing: -0.015em;
+    text-wrap: balance;
+}
+
+/* ---------- Phrase de clôture ---------- */
+.gar__since { font-family: var(--font-display); font-size: var(--fs-lg); line-height: 1.3; color: var(--color-on-dark-soft); }
+
+/* ---------- 48 rem ---------- */
+@media (min-width: 48rem) {
+    .gar__cave { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--space-7); align-items: center; }
+    .gar-fig { grid-column: 1; grid-row: 1; }
+    .gar__cave-text { grid-column: 2; grid-row: 1; }
+
+    .gar__preuves { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-7); align-items: start; }
+    .gar__list { row-gap: var(--space-7); }
+}
+
+@media (min-width: 72rem) {
+    .gar__cave { gap: var(--space-8); }
+}
+
+/* ---------- Mouvement réduit : l'aiguille est posée d'emblée ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .js .gar-fig .needle { transition: none; }
+    .js .gar-fig:not(.is-visible) .needle { transform: none; }
+}

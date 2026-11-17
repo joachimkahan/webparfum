@@ -1,0 +1,256 @@
+/* 04-contact.css : section contact (planche de correspondance), pied de page, mentions légales.
+   Mobile d'abord (390 px), puis 48 rem et 72 rem. Aucune couleur écrite en dur : tout vient de base.css. */
+
+/* ---------- Contact : la planche de correspondance ----------
+   Un seul cadre fin, comme les planches I et II : titre de planche, lettre cachetée gravée, message, bouton,
+   puis le cartouche des coordonnées, séparé par un filet et découpé en colonnes par des filets de 1 px. */
+.section.contact { padding-block: clamp(3.5rem, 2.4rem + 5vw, 7rem); }
+
+.corr {
+    max-width: 62rem; margin-inline: auto;
+    border: 1px solid var(--color-line-strong);
+    text-align: center;
+}
+.corr__top {
+    display: flex; flex-direction: column; align-items: center;
+    padding: var(--space-5) var(--space-5) var(--space-6);
+}
+.corr__plate {
+    margin: 0;
+    font-family: var(--font-display); font-style: italic; font-weight: 400;
+    font-size: var(--fs-lg); line-height: 1.2; color: var(--color-ink-soft);
+}
+
+/* Le dessin : même langage que la planche I (deux épaisseurs de trait, hachures à -40°, ombre en croissant bas-droit) */
+.corr__fig { margin: var(--space-4) 0 var(--space-4); width: 12rem; color: var(--color-ink); }
+.corr__svg {
+    width: 100%; height: auto; aspect-ratio: 240 / 160;
+    fill: none; stroke: currentColor; stroke-width: 1.2;
+    stroke-linecap: round; stroke-linejoin: round;
+}
+.corr__svg .soft { stroke: var(--color-line-strong); stroke-width: 0.9; }
+.corr__svg .fine { stroke-width: 0.6; }
+.corr__svg .o { fill: var(--color-bg-alt); }
+.corr__svg .hachure { stroke: var(--color-ink-soft); stroke-width: 0.55; }
+.corr__svg .jus-h { stroke: var(--color-primary); stroke-width: 0.95; }
+.corr__svg .shade { fill: url(#ct-hachure); stroke: none; }
+.corr__svg .jus { fill: url(#ct-jus); stroke: none; }
+
+/* Le seul mouvement : le cachet se pose, une fois, quand la planche entre à l'écran. */
+.corr__seal { transform-box: fill-box; transform-origin: center; }
+.js .corr__fig[data-reveal] { opacity: 1; transform: none; transition: none; }
+.js .corr__seal { transition: opacity 600ms var(--ease-out) 250ms, transform 600ms var(--ease-out) 250ms; }
+.js .corr__fig:not(.is-visible) .corr__seal { opacity: 0; transform: scale(1.08); }
+
+.corr__title { max-width: 22ch; font-size: clamp(2rem, 1.3rem + 2.4vw, 3.25rem); }
+.corr__lede { max-width: 38ch; margin: var(--space-4) auto 0; text-wrap: balance; }
+.corr__wa { margin-top: var(--space-6); min-height: 3.5rem; padding-inline: var(--space-4); }
+.corr__wa svg { width: 1.4rem; height: 1.4rem; }
+
+/* Cartouche des coordonnées : filet horizontal pleine largeur, puis une colonne par coordonnée */
+.corr__list { margin: 0; padding: 0; display: grid; border-top: 1px solid var(--color-line-strong); }
+.corr__item { position: relative; min-width: 0; padding: var(--space-5); }
+/* Tant qu'aucun réseau n'est renseigné (data/config.js), la ligne entière disparaît */
+.corr__item:has([data-reseaux-vides]:not([hidden])) { display: none; }
+/* Téléphone : filet court entre deux blocs empilés */
+.corr__item + .corr__item::before {
+    content: ""; position: absolute; top: 0; left: 50%; width: 2.5rem; margin-left: -1.25rem; height: 1px;
+    background: var(--color-line-strong);
+}
+.corr__item dt {
+    margin: 0 0 var(--space-1);
+    font-family: var(--font-display); font-style: italic; font-size: var(--fs-base); line-height: 1.3;
+    letter-spacing: 0; text-transform: none; color: var(--color-ink-soft);
+}
+.corr__item dd { margin: 0; font-size: var(--fs-base); line-height: 1.6; min-width: 0; }
+.corr__zone { max-width: 24ch; margin-inline: auto !important; padding-top: 0.55rem; text-wrap: balance; }
+
+.corr__val {
+    display: inline-flex; align-items: center; min-height: 2.75rem;
+    max-width: 100%; overflow-wrap: anywhere;
+    text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.35em;
+    text-decoration-color: var(--color-line-strong);
+    transition: text-decoration-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+.corr__reseaux { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--space-5); }
+.reseau {
+    display: inline-flex; align-items: center; gap: var(--space-3);
+    min-height: 2.75rem;
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out);
+}
+.reseau svg { width: 1.5rem; height: 1.5rem; flex: none; color: var(--color-ink-soft); }
+
+@media (hover: hover) and (pointer: fine) {
+    .corr__val:hover { color: var(--color-primary); text-decoration-color: var(--color-primary); }
+    .reseau:hover { color: var(--color-primary); }
+}
+
+/* ---------- Pied de page ---------- */
+.site-footer {
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-line-strong);
+    padding-block: var(--space-7) var(--space-5);
+}
+.site-footer__top { display: grid; gap: var(--space-6); }
+
+.site-footer__brand {
+    display: block; width: fit-content; max-width: 100%;
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(3.1rem, 0.6rem + 13.4vw, 9rem); line-height: 1;
+    letter-spacing: -0.035em; text-decoration: none;
+}
+.site-footer__brand em { font-style: italic; color: var(--color-primary); }
+/* Grande taille : le W de Bodoni laisse un vide à droite et le P touche le b ; crénage resserré ici seulement */
+.site-footer__brand .brand-w { margin-right: -0.085em; }
+.site-footer__brand .brand-p { margin-left: 0.09em; }
+.site-footer__slogan {
+    margin-top: var(--space-3);
+    font-family: var(--font-display); font-style: italic;
+    font-size: var(--fs-h3); line-height: 1.2; letter-spacing: -0.01em;
+    color: var(--color-ink-soft);
+}
+
+.site-footer__nav-block { display: grid; gap: var(--space-2); align-content: end; }
+.site-footer__nav { display: flex; flex-wrap: wrap; gap: 0 var(--space-5); }
+.site-footer__nav a {
+    display: inline-flex; align-items: center; min-height: 2.75rem;
+    font-size: var(--fs-base); text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out);
+}
+.site-footer__tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 var(--space-5); }
+
+.site-footer__lang { display: flex; align-items: center; margin-left: -0.5rem; }
+.site-footer__lang button {
+    position: relative; min-width: 2.75rem; min-height: 2.75rem;
+    font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.14em;
+    color: var(--color-ink-soft);
+    transition: color var(--dur-fast) var(--ease-out);
+}
+.site-footer__lang button::after {
+    content: ""; position: absolute; left: 22%; right: 22%; bottom: 0.6rem; height: 2px;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transition: transform var(--dur-fast) var(--ease-out);
+}
+.site-footer__lang button[aria-pressed="true"] { color: var(--color-ink); }
+.site-footer__lang button[aria-pressed="true"]::after { transform: scaleX(1); }
+.site-footer__lang span { width: 1px; height: 0.9rem; background: var(--color-line-strong); }
+
+.site-footer__up {
+    display: inline-flex; align-items: center; gap: var(--space-2); min-height: 2.75rem;
+    font-size: var(--fs-base); letter-spacing: 0; text-transform: none;
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out);
+}
+.site-footer__up svg { width: 1.25rem; height: 1.25rem; transition: transform var(--dur-fast) var(--ease-out); }
+
+.site-footer__bottom {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: var(--space-1) var(--space-5);
+    margin-top: var(--space-5); padding-top: var(--space-4);
+    border-top: 1px solid var(--color-line);
+}
+.site-footer__copy { font-size: var(--fs-sm); color: var(--color-ink-soft); }
+.site-footer__credit { font-size: var(--fs-xs); letter-spacing: 0.04em; color: var(--color-ink-soft); }
+
+/* Sans JavaScript, la bascule de langue ne fait rien : elle disparaît */
+html:not(.js) .site-footer__lang { display: none; }
+
+@media (hover: hover) and (pointer: fine) {
+    .site-footer__brand:hover em { color: var(--color-primary-hover); }
+    .site-footer__nav a:hover, .site-footer__up:hover, .site-footer__lang button:hover { color: var(--color-primary); }
+    .site-footer__up:hover svg { transform: translateY(-2px); }
+}
+
+/* ---------- Mentions légales : repliées dans un <details> ---------- */
+.mentions { margin-top: var(--space-6); border-top: 1px solid var(--color-line-strong); }
+.mentions__sum {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+    min-height: 3.5rem; padding-block: var(--space-2);
+    font-size: var(--fs-base); letter-spacing: 0; text-transform: none;
+    cursor: pointer; list-style: none;
+    transition: color var(--dur-fast) var(--ease-out);
+}
+.mentions__sum::-webkit-details-marker { display: none; }
+.mentions__sum > span:first-child { text-wrap: balance; }
+.mentions__plus { position: relative; width: 1rem; height: 1rem; flex: none; }
+.mentions__plus::before, .mentions__plus::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; margin-top: -0.5px;
+    background: currentColor;
+    transition: transform var(--dur) var(--ease-out);
+}
+.mentions__plus::after { transform: rotate(90deg); }
+.mentions[open] .mentions__plus::after { transform: rotate(0deg); }
+
+.mentions__body { display: grid; gap: var(--space-6); padding-block: var(--space-4) var(--space-6); }
+.mentions[open] .mentions__body { animation: mentions-in var(--dur) var(--ease-out) both; }
+@keyframes mentions-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+}
+
+.mentions__bloc { min-width: 0; font-size: var(--fs-sm); line-height: 1.6; color: var(--color-ink-soft); }
+.mentions__bloc h3 {
+    font-style: italic; font-size: 1.25rem; line-height: 1.2; letter-spacing: -0.01em;
+    color: var(--color-ink); margin-bottom: var(--space-2);
+}
+.mentions__bloc p + p { margin-top: var(--space-2); }
+.mentions__bloc a {
+    overflow-wrap: anywhere; color: var(--color-ink);
+    text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.25em;
+    text-decoration-color: var(--color-line-strong);
+    /* zone de toucher de 44 px de haut, sans changer la mise en page */
+    padding-block: 0.85rem;
+}
+
+/* Information qui manque encore : repérable, sobre */
+.a-completer {
+    font-style: italic; color: var(--color-ink);
+    background: var(--color-primary-wash);
+    padding: 0.05em 0.4em; border-radius: var(--radius);
+    box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .mentions__sum:hover { color: var(--color-primary); }
+    .mentions__bloc a:hover { color: var(--color-primary); text-decoration-color: var(--color-primary); }
+}
+
+/* ---------- 48 rem ---------- */
+@media (min-width: 48rem) {
+    .corr__top { padding: var(--space-6) var(--space-8) var(--space-8); }
+    .corr__fig { width: 15rem; margin-bottom: var(--space-5); }
+    .corr__wa { width: auto; padding-inline: 2rem; font-size: var(--fs-base); }
+    .corr__list { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+    .corr__item { padding: var(--space-6) var(--space-3); }
+    .corr__item + .corr__item::before { top: 0; bottom: 0; left: 0; width: 1px; height: auto; margin: 0; }
+    .corr__val { font-size: clamp(0.875rem, 0.55rem + 0.7vw, 1rem); }
+
+    .site-footer { padding-block: var(--space-8) var(--space-5); }
+    .site-footer__top { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: var(--space-7); }
+    .site-footer__nav-block { justify-items: end; }
+    .site-footer__nav { justify-content: flex-end; }
+    .site-footer__tools { justify-content: flex-end; }
+
+    .mentions__body { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6) var(--space-8); }
+}
+
+/* ---------- 72 rem ---------- */
+@media (min-width: 72rem) {
+    .mentions__body { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ---------- Mouvement réduit ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .mentions[open] .mentions__body { animation: none; }
+    .js .corr__seal { transition: none; }
+    .js .corr__fig:not(.is-visible) .corr__seal { opacity: 1; transform: none; }
+    .mentions__plus::before, .mentions__plus::after, .site-footer__lang button::after,
+    .site-footer__up svg { transition: none; }
+}
+
+/* Cachet WebParfum au-dessus du grand logotype (symbole #wp-sceau défini dans l'en-tête) */
+.site-footer__seal { display: block; width: 5.5rem; height: 5.5rem; margin-bottom: var(--space-5); color: var(--color-ink); --seal-accent: var(--color-primary); }
+@media (min-width: 48rem) { .site-footer__seal { width: 7rem; height: 7rem; } }
